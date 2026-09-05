@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -17,7 +19,7 @@ export const metadata: Metadata = {
   description: "Created by Kiuliumov",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+function Main({children}: {children: React.ReactNode}) {
   return (
     <html
       lang="en"
@@ -26,4 +28,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
+}
+
+export default function RootLayout({ children }: LayoutProps<"/">) {
+  return <>
+    <Navbar />
+    <Main>{children}</Main>
+    <Footer />
+  </>
+
 }
