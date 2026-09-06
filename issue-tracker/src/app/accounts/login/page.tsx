@@ -2,22 +2,43 @@
 
 import Link from "next/link";
 import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 import AuthCard from "../components/AuthCard";
 import Button from "../components/Button";
 import FormField from "../components/FormField";
+import api from "@/lib/api";
 
 export default function LoginForm() {
+  const router = useRouter();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    console.log({
-      username,
-      password,
-    });
+    setError("");
+
+    try {
+      await api.post("/accounts/login/", {
+        username,
+        password,
+      });
+
+      router.push("/dashboard");
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 400) {
+        setError(
+          error.response.data?.detail ??
+            "Invalid username or password.",
+        );
+      } else {
+        setError("Something went wrong. Please try again.");
+      }
+    }
   };
 
   return (
@@ -37,6 +58,15 @@ export default function LoginForm() {
       }
     >
       <form onSubmit={handleSubmit} className="space-y-6">
+        {error && (
+          <div
+            role="alert"
+            className="rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400"
+          >
+            {error}
+          </div>
+        )}
+
         <FormField
           id="username"
           name="username"
