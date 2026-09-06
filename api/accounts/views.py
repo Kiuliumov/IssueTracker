@@ -1,12 +1,20 @@
-from django.contrib.auth import login, logout
-from django.middleware.csrf import get_token
+from django.contrib.auth import get_user_model, login, logout
 from django.urls import reverse
+from django.middleware.csrf import get_token
+
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
 
-from .serializers import LoginSerializer, RegisterSerializer, UserSerializer
+from .serializers import (
+    ForgotPasswordSerializer,
+    LoginSerializer,
+    RegisterSerializer,
+    UserSerializer,
+)
 
+User = get_user_model()
 
 class ApiRootView(APIView):
     def get(self, request):
@@ -16,6 +24,8 @@ class ApiRootView(APIView):
                 "login": request.build_absolute_uri(reverse("login")),
                 "logout": request.build_absolute_uri(reverse("logout")),
                 "me": request.build_absolute_uri(reverse("me")),
+                "csrf": request.build_absolute_uri(reverse("csrf")),
+                "forgot-password": request.build_absolute_uri(reverse("forgot-password")),
             }
         )
 
@@ -74,3 +84,28 @@ class MeView(APIView):
 class CsrfView(APIView):
     def get(self, request):
         return Response({"csrfToken": get_token(request)})
+
+
+class ForgotPasswordView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = ForgotPasswordSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        email = serializer.validated_data["email"]
+
+        user = User.objects.filter(email__iexact=email).first()
+
+        if user:
+            # We will generate the reset token and send the email here.
+            pass
+
+        return Response(
+            {
+                "detail": (
+                    "If an account exists with that email address, " "you will receive a password reset link shortly."
+                )
+            },
+            status=status.HTTP_200_OK,
+        )

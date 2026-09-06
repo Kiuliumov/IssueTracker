@@ -52,6 +52,13 @@ class LoginSerializer(serializers.Serializer):
         return attrs
 
 
+class ForgotPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+    def validate_email(self, value):
+        return value.lower()
+
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
