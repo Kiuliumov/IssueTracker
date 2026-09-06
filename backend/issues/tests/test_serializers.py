@@ -29,7 +29,7 @@ class TestIssueSerializer:
 
         assert not serializer.is_valid()
         assert "title" in serializer.errors
-        assert serializer.errors["title"][0] == "Title cannot be blank."
+        assert serializer.errors["title"][0] == "This field may not be blank."
 
     @pytest.mark.django_db
     def test_missing_title_is_rejected(self):
