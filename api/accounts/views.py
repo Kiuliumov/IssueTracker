@@ -6,7 +6,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import ForgotPasswordSerializer, LoginSerializer, RegisterSerializer, UserSerializer
+from .serializers import (ForgotPasswordSerializer, LoginSerializer,
+                          RegisterSerializer, UserSerializer)
 from .tasks import send_password_reset_email
 
 User = get_user_model()
