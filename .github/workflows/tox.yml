@@ -13,9 +13,31 @@ jobs:
     name: Backend checks
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: issuetracker
+          POSTGRES_USER: issuetracker
+          POSTGRES_PASSWORD: issuetracker
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U issuetracker -d issuetracker"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=5
+
     defaults:
       run:
         working-directory: backend
+
+    env:
+      POSTGRES_DB: issuetracker
+      POSTGRES_USER: issuetracker
+      POSTGRES_PASSWORD: issuetracker
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: 5432
 
     steps:
       - name: Checkout repository
