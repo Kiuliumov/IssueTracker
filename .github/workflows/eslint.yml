@@ -24,9 +24,9 @@ jobs:
           cache-dependency-path: issue-tracker/package-lock.json
 
       - name: Install dependencies
-        working-directory: ./issue-tracker
+        working-directory: ./frontend
         run: npm ci
 
       - name: Run ESLint
-        working-directory: ./issue-tracker
+        working-directory: ./frontend
         run: npm run lint
