@@ -26,7 +26,8 @@ class TestIssueViewSet:
         response = authenticated_client.get("/api/issues/")
 
         assert response.status_code == 200
-        assert len(response.data) == 2
+        assert response.data["count"] == 2
+        assert len(response.data["results"]) == 2
 
     @pytest.mark.django_db
     def test_authenticated_user_can_create_issue(
