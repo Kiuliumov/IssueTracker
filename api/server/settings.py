@@ -72,7 +72,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "server.wsgi.application"
 
+CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
+
 AUTH_USER_MODEL = "accounts.User"
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = "noreply@issuetracker.local"
+
+FRONTEND_URL = "http://localhost:3000"
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 

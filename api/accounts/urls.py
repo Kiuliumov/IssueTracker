@@ -1,7 +1,6 @@
 from django.urls import path
 
-from .views import (ApiRootView, CsrfView, ForgotPasswordView, LoginView,
-                    LogoutView, MeView, RegisterView)
+from .views import ApiRootView, CsrfView, ForgotPasswordView, LoginView, LogoutView, MeView, RegisterView
 
 urlpatterns = [
     path("csrf/", CsrfView.as_view(), name="csrf"),

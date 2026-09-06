@@ -6,8 +6,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import (ForgotPasswordSerializer, LoginSerializer,
-                          RegisterSerializer, UserSerializer)
+from .serializers import ForgotPasswordSerializer, LoginSerializer, RegisterSerializer, UserSerializer
+from .tasks import send_password_reset_email
 
 User = get_user_model()
 
@@ -83,7 +83,7 @@ class CsrfView(APIView):
 
 
 class ForgotPasswordView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.AllowAny]
 
     def post(self, request):
         serializer = ForgotPasswordSerializer(data=request.data)
@@ -94,8 +94,7 @@ class ForgotPasswordView(APIView):
         user = User.objects.filter(email__iexact=email).first()
 
         if user:
-            # We will generate the reset token and send the email here.
-            pass
+            send_password_reset_email.delay(user.pk)
 
         return Response(
             {
