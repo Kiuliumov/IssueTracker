@@ -26,7 +26,7 @@ export default function LoginForm() {
       description="Welcome back. Enter your credentials to continue."
       footer={
         <>
-          Don't have an account?{" "}
+          <p>Don&apos;t have an account?</p>{" "}
           <Link
             href="/accounts/register"
             className="font-semibold text-indigo-300 hover:text-indigo-300"

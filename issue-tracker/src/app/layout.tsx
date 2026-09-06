@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   description: "Created by Kiuliumov",
 };
 
-function Main({children}: {children: React.ReactNode}) {
+function Main({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
@@ -31,10 +31,11 @@ function Main({children}: {children: React.ReactNode}) {
 }
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
-  return <>
-    <Navbar />
-    <Main>{children}</Main>
-    <Footer />
-  </>
-
+  return (
+    <>
+      <Navbar />
+      <Main>{children}</Main>
+      <Footer />
+    </>
+  );
 }

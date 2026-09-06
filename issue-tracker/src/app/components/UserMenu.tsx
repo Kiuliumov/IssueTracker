@@ -30,9 +30,7 @@ export default function UserMenu() {
         >
           <div className="border-b border-white/10 px-4 py-3">
             <p className="text-sm font-medium text-white">John Doe</p>
-            <p className="truncate text-xs text-gray-400">
-              john@example.com
-            </p>
+            <p className="truncate text-xs text-gray-400">john@example.com</p>
           </div>
 
           <Link

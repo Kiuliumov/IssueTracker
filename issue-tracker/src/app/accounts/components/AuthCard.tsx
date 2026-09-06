@@ -29,9 +29,7 @@ export default function AuthCard({
 
           {children}
 
-          <div className="mt-8 text-center text-sm text-zinc-400">
-            {footer}
-          </div>
+          <div className="mt-8 text-center text-sm text-zinc-400">{footer}</div>
         </div>
       </div>
     </main>
