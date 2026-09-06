@@ -1,6 +1,7 @@
 from django.urls import path
 
-from .views import ApiRootView, LoginView, LogoutView, MeView, RegisterView, CsrfView
+from .views import (ApiRootView, CsrfView, LoginView, LogoutView, MeView,
+                    RegisterView)
 
 urlpatterns = [
     path("", ApiRootView.as_view(), name="api-root"),
