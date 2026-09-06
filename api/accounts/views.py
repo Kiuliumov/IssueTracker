@@ -1,4 +1,5 @@
 from django.contrib.auth import login, logout
+from django.middleware.csrf import get_token
 from django.urls import reverse
 from rest_framework import permissions, status
 from rest_framework.response import Response
@@ -68,3 +69,8 @@ class MeView(APIView):
 
     def get(self, request):
         return Response(UserSerializer(request.user).data)
+
+
+class CsrfView(APIView):
+    def get(self, request):
+        return Response({"csrfToken": get_token(request)})
