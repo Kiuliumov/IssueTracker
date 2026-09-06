@@ -87,7 +87,7 @@ class CsrfView(APIView):
 class ForgotPasswordView(APIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = ForgotPasswordSerializer
-    
+
     def post(self, request):
         serializer = ForgotPasswordSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
