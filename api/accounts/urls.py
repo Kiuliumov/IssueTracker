@@ -1,9 +1,10 @@
 from django.urls import path
 
-from .views import ApiRootView, LoginView, LogoutView, MeView, RegisterView
+from .views import ApiRootView, LoginView, LogoutView, MeView, RegisterView, CsrfView
 
 urlpatterns = [
-    path("", ApiRootView.as_view(), name="api-root"),
+    path("", ApiRootView.as_view(), name="api-root"),\
+    path("csrf/", CsrfView.as_view(), name="csrf"),
     path("register/", RegisterView.as_view(), name="register"),
     path("login/", LoginView.as_view(), name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
