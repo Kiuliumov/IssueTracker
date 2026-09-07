@@ -2,7 +2,7 @@
 
 import { observer } from "mobx-react-lite";
 
-import Button from "@/components/Button";
+import Button from "@/components/ui/Button";
 import authStore from "@/stores/authStore";
 
 function Hero() {

@@ -7,7 +7,7 @@ import { FormEvent, useState } from "react";
 import AuthCard from "../components/AuthCard";
 import Button from "../components/Button";
 import FormField from "../components/FormField";
-import GuestGuard from "@/components/GuestRoute";
+import GuestGuard from "@/components/route-guards/GuestRoute";
 import api from "@/lib/api";
 
 export default function ForgotPasswordPage() {
