@@ -15,10 +15,12 @@ class TestIssueViewSet:
         self,
         authenticated_client,
         user,
+        project,
     ):
         baker.make(
             Issue,
             reporter=user,
+            project=project,
             _quantity=2,
         )
 
@@ -32,10 +34,12 @@ class TestIssueViewSet:
         self,
         authenticated_client,
         user,
+        project,
     ):
         response = authenticated_client.post(
             "/api/issues/",
             {
+                "project": project.id,
                 "title": "New issue",
                 "description": "Something is broken.",
                 "status": "open",
@@ -48,16 +52,22 @@ class TestIssueViewSet:
 
         issue = Issue.objects.get(pk=response.data["id"])
 
+        assert issue.project == project
         assert issue.title == "New issue"
         assert issue.description == "Something is broken."
         assert issue.status == "open"
         assert issue.priority == "high"
         assert issue.reporter == user
 
-    def test_anonymous_user_cannot_create_issue(self, api_client):
+    def test_anonymous_user_cannot_create_issue(
+        self,
+        api_client,
+        project,
+    ):
         response = api_client.post(
             "/api/issues/",
             {
+                "project": project.id,
                 "title": "New issue",
             },
             format="json",
@@ -68,10 +78,12 @@ class TestIssueViewSet:
     def test_create_issue_rejects_blank_title(
         self,
         authenticated_client,
+        project,
     ):
         response = authenticated_client.post(
             "/api/issues/",
             {
+                "project": project.id,
                 "title": "   ",
             },
             format="json",
@@ -83,10 +95,12 @@ class TestIssueViewSet:
     def test_create_issue_rejects_invalid_status(
         self,
         authenticated_client,
+        project,
     ):
         response = authenticated_client.post(
             "/api/issues/",
             {
+                "project": project.id,
                 "title": "Test issue",
                 "status": "invalid",
             },
@@ -99,10 +113,12 @@ class TestIssueViewSet:
     def test_create_issue_rejects_invalid_priority(
         self,
         authenticated_client,
+        project,
     ):
         response = authenticated_client.post(
             "/api/issues/",
             {
+                "project": project.id,
                 "title": "Test issue",
                 "priority": "invalid",
             },
@@ -117,11 +133,14 @@ class TestIssueViewSet:
         authenticated_client,
         issue,
     ):
-        response = authenticated_client.get(f"/api/issues/{issue.id}/")
+        response = authenticated_client.get(
+            f"/api/issues/{issue.id}/"
+        )
 
         assert response.status_code == 200
         assert response.data["id"] == issue.id
         assert response.data["title"] == issue.title
+        assert response.data["project"] == issue.project.id
 
     def test_authenticated_user_can_update_issue(
         self,
@@ -151,7 +170,9 @@ class TestIssueViewSet:
         authenticated_client,
         issue,
     ):
-        response = authenticated_client.delete(f"/api/issues/{issue.id}/")
+        response = authenticated_client.delete(
+            f"/api/issues/{issue.id}/"
+        )
 
         assert response.status_code == 204
         assert not Issue.objects.filter(pk=issue.id).exists()
@@ -160,6 +181,8 @@ class TestIssueViewSet:
         self,
         authenticated_client,
     ):
-        response = authenticated_client.get("/api/issues/999999/")
+        response = authenticated_client.get(
+            "/api/issues/999999/"
+        )
 
         assert response.status_code == 404
