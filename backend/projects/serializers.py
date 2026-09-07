@@ -1,10 +1,16 @@
 from rest_framework import serializers
 
+from accounts.serializers import UserSerializer
+
 from .models import Project
 
 
 class ProjectSerializer(serializers.ModelSerializer):
-    owner = serializers.ReadOnlyField(source="owner.id")
+    owner = UserSerializer(read_only=True)
+    members = UserSerializer(
+        many=True,
+        read_only=True,
+    )
 
     class Meta:
         model = Project
@@ -13,12 +19,14 @@ class ProjectSerializer(serializers.ModelSerializer):
             "name",
             "description",
             "owner",
+            "members",
             "created_at",
             "updated_at",
         ]
         read_only_fields = [
             "id",
             "owner",
+            "members",
             "created_at",
             "updated_at",
         ]

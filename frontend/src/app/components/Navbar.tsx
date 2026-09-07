@@ -3,10 +3,8 @@ import MobileMenu from "./MobileMenu";
 import UserMenu from "./UserMenu";
 
 const navItems = [
-  { name: "Dashboard", href: "/dashboard" },
-  { name: "Issues", href: "/issues" },
   { name: "Projects", href: "/projects" },
-  { name: "My Issues", href: "/my-issues" },
+  { name: "Issues", href: "/projects/issues" },
 ];
 
 export default function Navbar() {
