@@ -5,13 +5,15 @@ import { observer } from "mobx-react-lite";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import Button from "@/components/ui/Button";
 import Container from "@/components/layout/Container";
 import ErrorMessage from "@/components/ui/ErrorMessage";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Card from "@/components/ui/Card";
 import ProtectedRoute from "@/components/route-guards/ProtectedRoute";
+import IssueList from "../components/issues/IssueList";
+import IssueForm from "../components/issues/IssueForm";
 import { getProject, type Project } from "@/lib/projects";
+import issueStore from "@/stores/issueStore";
 import projectStore from "@/stores/projectStore";
 
 function ProjectDetailPage() {
@@ -21,6 +23,7 @@ function ProjectDetailPage() {
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showIssueForm, setShowIssueForm] = useState(false);
 
   const projectId = Number(params.id);
 
@@ -34,6 +37,8 @@ function ProjectDetailPage() {
       try {
         const data = await getProject(projectId);
         setProject(data);
+
+        await issueStore.fetchIssues();
       } catch {
         setError("Failed to load project.");
       } finally {
@@ -116,15 +121,40 @@ function ProjectDetailPage() {
               <div className="grid gap-6 lg:grid-cols-3">
                 <div className="lg:col-span-2">
                   <Card className="p-6">
-                    <h2 className="text-lg font-semibold text-white">
-                      Issues
-                    </h2>
+                    <div className="mb-6 flex items-center justify-between">
+                      <div>
+                        <h2 className="text-lg font-semibold text-white">
+                          Issues
+                        </h2>
 
-                    <div className="mt-6 rounded-lg border border-dashed border-gray-800 px-6 py-10 text-center">
-                      <p className="text-sm text-gray-400">
-                        Issues will appear here.
-                      </p>
+                        <p className="mt-1 text-sm text-gray-400">
+                          Track and manage issues for this project.
+                        </p>
+                      </div>
+
+                      {!showIssueForm && (
+                        <button
+                          type="button"
+                          onClick={() => setShowIssueForm(true)}
+                          className="rounded-lg bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-400"
+                        >
+                          New issue
+                        </button>
+                      )}
                     </div>
+
+                    {showIssueForm ? (
+                      <IssueForm
+                        projectId={project.id}
+                        onSuccess={() => setShowIssueForm(false)}
+                        onCancel={() => setShowIssueForm(false)}
+                      />
+                    ) : (
+                      <IssueList
+                        projectId={project.id}
+                        onCreate={() => setShowIssueForm(true)}
+                      />
+                    )}
                   </Card>
                 </div>
 
@@ -140,9 +170,8 @@ function ProjectDetailPage() {
                           <p className="text-sm font-medium text-white">
                             User #{project.owner}
                           </p>
-                          <p className="text-xs text-gray-400">
-                            Owner
-                          </p>
+
+                          <p className="text-xs text-gray-400">Owner</p>
                         </div>
                       </div>
 
@@ -155,9 +184,7 @@ function ProjectDetailPage() {
                             User #{memberId}
                           </p>
 
-                          <span className="text-xs text-gray-400">
-                            Member
-                          </span>
+                          <span className="text-xs text-gray-400">Member</span>
                         </div>
                       ))}
                     </div>

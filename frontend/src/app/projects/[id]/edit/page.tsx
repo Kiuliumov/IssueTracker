@@ -69,9 +69,7 @@ export default function EditProjectPage() {
               </div>
             )}
 
-            {!loading && error && (
-              <ErrorMessage message={error} />
-            )}
+            {!loading && error && <ErrorMessage message={error} />}
 
             {!loading && project && (
               <ProjectForm
