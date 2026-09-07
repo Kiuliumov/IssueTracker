@@ -56,10 +56,7 @@ function IssuesPage() {
               <>
                 <div className="grid gap-4">
                   {issueStore.issues.map((issue) => (
-                    <IssueCard
-                      key={issue.id}
-                      issue={issue}
-                    />
+                    <IssueCard key={issue.id} issue={issue} />
                   ))}
                 </div>
 

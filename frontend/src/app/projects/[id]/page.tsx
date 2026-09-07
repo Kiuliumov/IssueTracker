@@ -167,24 +167,32 @@ function ProjectDetailPage() {
                     <div className="mt-5 space-y-3">
                       <div className="flex items-center justify-between rounded-lg bg-gray-800 px-4 py-3">
                         <div>
-                          <p className="text-sm font-medium text-white">
-                            User #{project.owner}
-                          </p>
+                          <Link
+                            href="/profile"
+                            className="text-sm font-medium text-white hover:text-indigo-400"
+                          >
+                            {project.owner.username}
+                          </Link>
 
                           <p className="text-xs text-gray-400">Owner</p>
                         </div>
                       </div>
 
-                      {project.members.map((memberId) => (
+                      {project.members.map((member) => (
                         <div
-                          key={memberId}
+                          key={member.id}
                           className="flex items-center justify-between rounded-lg bg-gray-800 px-4 py-3"
                         >
-                          <p className="text-sm font-medium text-white">
-                            User #{memberId}
-                          </p>
+                          <div>
+                            <Link
+                              href="/profile"
+                              className="text-sm font-medium text-white hover:text-indigo-400"
+                            >
+                              {member.username}
+                            </Link>
 
-                          <span className="text-xs text-gray-400">Member</span>
+                            <p className="text-xs text-gray-400">Member</p>
+                          </div>
                         </div>
                       ))}
                     </div>

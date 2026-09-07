@@ -1,11 +1,13 @@
 from rest_framework import serializers
 
+from accounts.serializers import UserSerializer
+
 from .models import Project
 
 
 class ProjectSerializer(serializers.ModelSerializer):
-    owner = serializers.ReadOnlyField(source="owner.id")
-    members = serializers.PrimaryKeyRelatedField(
+    owner = UserSerializer(read_only=True)
+    members = UserSerializer(
         many=True,
         read_only=True,
     )

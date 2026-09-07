@@ -86,17 +86,41 @@ export default function IssueCard({ issue }: IssueCardProps) {
         </Badge>
       </div>
 
-      <div className="mt-5 flex items-center justify-between border-t border-gray-800 pt-4">
-        <span className="text-xs text-gray-500">
-          Reporter #{issue.reporter}
-        </span>
+      <div className="mt-5 flex flex-col gap-3 border-t border-gray-800 pt-4">
+        <div className="flex items-center justify-between">
+          <span className="text-xs text-gray-500">Reporter</span>
 
-        <Link
-          href={`/issues/${issue.id}`}
-          className="text-sm font-medium text-indigo-400 hover:text-indigo-300"
-        >
-          View issue →
-        </Link>
+          <Link
+            href="/profile"
+            className="text-sm font-medium text-gray-300 hover:text-indigo-400"
+          >
+            {issue.reporter.username}
+          </Link>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <span className="text-xs text-gray-500">Assignee</span>
+
+          {issue.assignee ? (
+            <Link
+              href="/profile"
+              className="text-sm font-medium text-gray-300 hover:text-indigo-400"
+            >
+              {issue.assignee.username}
+            </Link>
+          ) : (
+            <span className="text-sm text-gray-500">Unassigned</span>
+          )}
+        </div>
+
+        <div className="flex justify-end">
+          <Link
+            href={`/projects/issues/${issue.id}`}
+            className="text-sm font-medium text-indigo-400 hover:text-indigo-300"
+          >
+            View issue →
+          </Link>
+        </div>
       </div>
     </Card>
   );

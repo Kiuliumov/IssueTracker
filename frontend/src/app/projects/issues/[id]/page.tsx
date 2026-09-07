@@ -159,7 +159,7 @@ function IssueDetailPage() {
 
                 <div className="flex shrink-0 gap-3">
                   <Link
-                    href={`/issues/${issue.id}/edit`}
+                    href={`/projects/issues/${issue.id}/edit`}
                     className="rounded-lg border border-gray-700 px-4 py-2.5 text-sm font-semibold text-gray-300 transition hover:bg-gray-800 hover:text-white"
                   >
                     Edit
@@ -232,8 +232,13 @@ function IssueDetailPage() {
                           Reporter
                         </dt>
 
-                        <dd className="mt-1 text-sm text-gray-300">
-                          User #{issue.reporter}
+                        <dd className="mt-1 text-sm">
+                          <Link
+                            href="/profile"
+                            className="text-gray-300 hover:text-indigo-400"
+                          >
+                            {issue.reporter.username}
+                          </Link>
                         </dd>
                       </div>
 
@@ -242,10 +247,17 @@ function IssueDetailPage() {
                           Assignee
                         </dt>
 
-                        <dd className="mt-1 text-sm text-gray-300">
-                          {issue.assignee
-                            ? `User #${issue.assignee}`
-                            : "Unassigned"}
+                        <dd className="mt-1 text-sm">
+                          {issue.assignee ? (
+                            <Link
+                              href="/profile"
+                              className="text-gray-300 hover:text-indigo-400"
+                            >
+                              {issue.assignee.username}
+                            </Link>
+                          ) : (
+                            <span className="text-gray-500">Unassigned</span>
+                          )}
                         </dd>
                       </div>
 

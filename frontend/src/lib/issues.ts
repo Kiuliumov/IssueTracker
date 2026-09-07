@@ -1,5 +1,13 @@
 import api from "@/lib/api";
 
+export type IssueUser = {
+  id: number;
+  username: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+};
+
 export type IssueStatus = "open" | "in_progress" | "resolved" | "closed";
 
 export type IssuePriority = "low" | "medium" | "high" | "critical";
@@ -11,8 +19,8 @@ export type Issue = {
   description: string;
   status: IssueStatus;
   priority: IssuePriority;
-  reporter: number;
-  assignee: number | null;
+  reporter: IssueUser;
+  assignee: IssueUser | null;
   created_at: string;
   updated_at: string;
 };
@@ -23,7 +31,7 @@ export type IssueInput = {
   description: string;
   status: IssueStatus;
   priority: IssuePriority;
-  assignee: number | null;
+  assignee_id: number | null;
 };
 
 export type IssueListResponse = {

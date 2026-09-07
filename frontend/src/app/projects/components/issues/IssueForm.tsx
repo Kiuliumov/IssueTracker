@@ -30,12 +30,15 @@ export default function IssueForm({
 }: IssueFormProps) {
   const [title, setTitle] = useState(issue?.title ?? "");
   const [description, setDescription] = useState(issue?.description ?? "");
+
   const [status, setStatus] = useState<IssueStatus>(issue?.status ?? "open");
+
   const [priority, setPriority] = useState<IssuePriority>(
     issue?.priority ?? "medium",
   );
+
   const [assignee, setAssignee] = useState(
-    issue?.assignee ? String(issue.assignee) : "",
+    issue?.assignee ? String(issue.assignee.id) : "",
   );
 
   const [error, setError] = useState<string | null>(null);
@@ -58,7 +61,7 @@ export default function IssueForm({
       description: description.trim(),
       status,
       priority,
-      assignee: assignee ? Number(assignee) : null,
+      assignee_id: assignee ? Number(assignee) : null,
     };
 
     setSaving(true);

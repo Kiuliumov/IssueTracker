@@ -1,11 +1,19 @@
 import api from "@/lib/api";
 
+export type ProjectUser = {
+  id: number;
+  username: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+};
+
 export type Project = {
   id: number;
   name: string;
   description: string;
-  owner: number;
-  members: number[];
+  owner: ProjectUser;
+  members: ProjectUser[];
   created_at: string;
   updated_at: string;
 };
@@ -32,17 +40,17 @@ export async function getProjects(page = 1) {
 
 export async function getProject(id: number) {
   const response = await api.get(`/projects/${id}/`);
-  return response.data;
+  return response.data as Project;
 }
 
 export async function createProject(data: ProjectInput) {
   const response = await api.post("/projects/", data);
-  return response.data;
+  return response.data as Project;
 }
 
 export async function updateProject(id: number, data: ProjectInput) {
   const response = await api.patch(`/projects/${id}/`, data);
-  return response.data;
+  return response.data as Project;
 }
 
 export async function deleteProject(id: number) {
