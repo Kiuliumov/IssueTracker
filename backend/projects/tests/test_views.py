@@ -112,3 +112,72 @@ class TestProjectViewSet:
         response = authenticated_client.get("/api/projects/999999/")
 
         assert response.status_code == 404
+
+    def test_user_only_sees_owned_projects(
+        self,
+        authenticated_client,
+        user,
+    ):
+        another_user = baker.make(
+            "accounts.User",
+            username="anotheruser",
+        )
+
+        owned_project = baker.make(
+            Project,
+            owner=user,
+        )
+
+        baker.make(
+            Project,
+            owner=another_user,
+        )
+
+        response = authenticated_client.get("/api/projects/")
+
+        assert response.status_code == 200
+        assert response.data["count"] == 1
+        assert response.data["results"][0]["id"] == owned_project.id
+
+    def test_user_cannot_update_another_users_project(
+        self,
+        authenticated_client,
+    ):
+        another_user = baker.make(
+            "accounts.User",
+            username="anotheruser",
+        )
+
+        project = baker.make(
+            Project,
+            owner=another_user,
+        )
+
+        response = authenticated_client.patch(
+            f"/api/projects/{project.id}/",
+            {
+                "name": "Hacked project",
+            },
+            format="json",
+        )
+
+    assert response.status_code == 404
+
+    def test_user_cannot_delete_another_users_project(
+        self,
+        authenticated_client,
+    ):
+        another_user = baker.make(
+            "accounts.User",
+            username="anotheruser",
+        )
+
+        project = baker.make(
+            Project,
+            owner=another_user,
+        )
+
+        response = authenticated_client.delete(f"/api/projects/{project.id}/")
+
+        assert response.status_code == 404
+        assert Project.objects.filter(pk=project.id).exists()
