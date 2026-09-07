@@ -91,15 +91,3 @@ Run frontend checks:
 npm run lint
 npm run format:check
 ```
-
-## Current Features
-
-* User registration
-* Session-based login/logout
-* CSRF protection
-* Authentication guards
-* Password reset
-* Celery background tasks
-* Redis integration
-* PostgreSQL database
-* Docker-based development environment
