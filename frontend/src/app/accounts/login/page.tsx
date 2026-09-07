@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import AuthCard from "../components/AuthCard";
 import Button from "../components/Button";
 import FormField from "../components/FormField";
-import GuestGuard from "../../../components/GuestGuard";
+import GuestRoute from "../../../components/GuestRoute";
 import api from "@/lib/api";
 
 export default function LoginPage() {
@@ -35,7 +35,7 @@ export default function LoginPage() {
   };
 
   return (
-    <GuestGuard>
+    <GuestRoute>
       <AuthCard
         title="Sign in to your account"
         description="Welcome back. Enter your credentials to continue."
@@ -108,6 +108,6 @@ export default function LoginPage() {
           <Button type="submit">Sign in</Button>
         </form>
       </AuthCard>
-    </GuestGuard>
+    </GuestRoute>
   );
 }

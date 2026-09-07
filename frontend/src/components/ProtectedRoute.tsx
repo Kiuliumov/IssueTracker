@@ -8,11 +8,11 @@ import { reaction } from "mobx";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import authStore from "@/stores/authStore";
 
-type GuestGuardProps = {
+type ProtectedRouteProps = {
   children: React.ReactNode;
 };
 
-function GuestGuard({ children }: GuestGuardProps) {
+function ProtectedRoute({ children }: ProtectedRouteProps) {
   const router = useRouter();
 
   useEffect(() => {
@@ -28,8 +28,8 @@ function GuestGuard({ children }: GuestGuardProps) {
         user: authStore.user,
       }),
       ({ initialized, user }) => {
-        if (initialized && user) {
-          router.replace("/");
+        if (initialized && !user) {
+          router.replace("/accounts/login");
         }
       },
     );
@@ -41,11 +41,11 @@ function GuestGuard({ children }: GuestGuardProps) {
     return <LoadingSpinner />;
   }
 
-  if (authStore.user) {
+  if (!authStore.user) {
     return <LoadingSpinner />;
   }
 
   return children;
 }
 
-export default observer(GuestGuard);
+export default observer(ProtectedRoute);
