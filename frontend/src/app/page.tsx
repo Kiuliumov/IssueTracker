@@ -1,25 +1,11 @@
-"use client";
-
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-
-import authStore from "@/stores/authStore";
+import FeatureSection from "./components/home/FeatureSection";
+import Hero from "./components/home/Hero";
 
 export default function Home() {
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!authStore.initialized) {
-      authStore.fetchUser();
-      return;
-    }
-
-    if (authStore.user) {
-      router.replace("/dashboard");
-    } else {
-      router.replace("/accounts/login");
-    }
-  }, [router]);
-
-  return null;
+  return (
+    <main className="min-h-screen bg-gray-950 text-white">
+      <Hero />
+      <FeatureSection />
+    </main>
+  );
 }
