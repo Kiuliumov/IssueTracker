@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import AuthCard from "../components/AuthCard";
 import Button from "../components/Button";
 import FormField from "../components/FormField";
-import GuestGuard from "@/components/GuestGuard";
+import GuestRoute from "@/components/GuestRoute";
 import api from "@/lib/api";
 
 export default function RegisterPage() {
@@ -63,7 +63,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <GuestGuard>
+    <GuestRoute>
       <AuthCard
         title="Create your account"
         description="Get started by creating your account."
@@ -140,6 +140,6 @@ export default function RegisterPage() {
           <Button type="submit">Create account</Button>
         </form>
       </AuthCard>
-    </GuestGuard>
+    </GuestRoute>
   );
 }
