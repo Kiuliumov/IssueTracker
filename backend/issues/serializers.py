@@ -10,6 +10,7 @@ class IssueSerializer(serializers.ModelSerializer):
         model = Issue
         fields = [
             "id",
+            "project",
             "title",
             "description",
             "status",

@@ -10,6 +10,7 @@ class IssueViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Issue.objects.select_related(
+            "project",
             "reporter",
             "assignee",
         ).order_by("-created_at")
