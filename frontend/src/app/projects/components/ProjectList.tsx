@@ -61,11 +61,7 @@ function ProjectList({ onEdit, onCreate }: ProjectListProps) {
         <>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {projectStore.filteredProjects.map((project) => (
-              <ProjectCard
-                key={project.id}
-                project={project}
-                onEdit={onEdit}
-              />
+              <ProjectCard key={project.id} project={project} onEdit={onEdit} />
             ))}
           </div>
 

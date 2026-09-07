@@ -12,9 +12,7 @@ function ProjectFilters() {
         type="search"
         placeholder="Search projects..."
         value={projectStore.searchQuery}
-        onChange={(event) =>
-          projectStore.setSearchQuery(event.target.value)
-        }
+        onChange={(event) => projectStore.setSearchQuery(event.target.value)}
         className="max-w-md"
       />
     </div>

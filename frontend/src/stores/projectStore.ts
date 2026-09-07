@@ -114,9 +114,7 @@ class ProjectStore {
       await deleteProject(id);
 
       runInAction(() => {
-        this.projects = this.projects.filter(
-          (project) => project.id !== id,
-        );
+        this.projects = this.projects.filter((project) => project.id !== id);
         this.totalProjects -= 1;
       });
     } catch {

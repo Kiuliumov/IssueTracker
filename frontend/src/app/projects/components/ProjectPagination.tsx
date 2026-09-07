@@ -11,9 +11,7 @@ function ProjectPagination() {
 
   return (
     <div className="mt-8 flex items-center justify-between border-t border-gray-800 pt-6">
-      <p className="text-sm text-gray-400">
-        Page {projectStore.currentPage}
-      </p>
+      <p className="text-sm text-gray-400">Page {projectStore.currentPage}</p>
 
       <div className="flex gap-3">
         <button
