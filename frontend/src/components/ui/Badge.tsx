@@ -10,10 +10,7 @@ const variants = {
   danger: "bg-red-500/10 text-red-400",
 };
 
-export default function Badge({
-  children,
-  variant = "default",
-}: BadgeProps) {
+export default function Badge({ children, variant = "default" }: BadgeProps) {
   return (
     <span
       className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${variants[variant]}`}

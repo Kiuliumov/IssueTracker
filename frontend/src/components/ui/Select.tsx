@@ -1,5 +1,4 @@
-type SelectProps =
-  React.SelectHTMLAttributes<HTMLSelectElement>;
+type SelectProps = React.SelectHTMLAttributes<HTMLSelectElement>;
 
 export default function Select({
   className = "",
