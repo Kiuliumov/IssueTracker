@@ -5,6 +5,7 @@ import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
+import Avatar from "./Avatar";
 import authStore from "@/stores/authStore";
 
 function UserMenu() {
@@ -29,14 +30,12 @@ function UserMenu() {
     return (
       <Link
         href="/accounts/login"
-        className="rounded-md bg-indigo-500 px-4 py-2 mx-3 text-sm font-semibold text-white hover:bg-indigo-400"
+        className="mx-3 rounded-md bg-indigo-500 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-400"
       >
         Sign in
       </Link>
     );
   }
-
-  const initials = authStore.user.username.slice(0, 2).toUpperCase();
 
   return (
     <div className="relative ml-3">
@@ -50,9 +49,7 @@ function UserMenu() {
         <span className="absolute -inset-1.5" />
         <span className="sr-only">Open user menu</span>
 
-        <div className="flex size-8 items-center justify-center rounded-full bg-indigo-500 text-sm font-semibold text-white">
-          {initials}
-        </div>
+        <Avatar name={authStore.user.username} size="sm" />
       </button>
 
       {open && (
