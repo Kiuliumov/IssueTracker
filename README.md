@@ -91,3 +91,5 @@ Run frontend checks:
 npm run lint
 npm run format:check
 ```
+
+Note: All frontend styles are AI generated or directly copied from the tailwind component templates. Showcasing designs is not the primary goal of this project.
