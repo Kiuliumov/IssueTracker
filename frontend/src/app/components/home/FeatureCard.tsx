@@ -3,10 +3,7 @@ type FeatureCardProps = {
   description: string;
 };
 
-export default function FeatureCard({
-  title,
-  description,
-}: FeatureCardProps) {
+export default function FeatureCard({ title, description }: FeatureCardProps) {
   return (
     <div className="rounded-2xl border border-gray-800 bg-gray-950 p-8 transition hover:-translate-y-1 hover:border-gray-700">
       <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-lg bg-gray-800 text-sm font-semibold">

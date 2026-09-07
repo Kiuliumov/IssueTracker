@@ -3,6 +3,7 @@
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { reaction } from "mobx";
 
 import LoadingSpinner from "@/components/LoadingSpinner";
 import authStore from "@/stores/authStore";
@@ -15,13 +16,25 @@ function GuestGuard({ children }: GuestGuardProps) {
   const router = useRouter();
 
   useEffect(() => {
-    authStore.fetchUser();
+    if (!authStore.initialized) {
+      authStore.fetchUser();
+    }
   }, []);
 
   useEffect(() => {
-    if (authStore.initialized && authStore.user) {
-      router.replace("/dashboard");
-    }
+    const dispose = reaction(
+      () => ({
+        initialized: authStore.initialized,
+        user: authStore.user,
+      }),
+      ({ initialized, user }) => {
+        if (initialized && user) {
+          router.replace("/");
+        }
+      },
+    );
+
+    return dispose;
   }, [router]);
 
   if (!authStore.initialized) {
@@ -29,7 +42,7 @@ function GuestGuard({ children }: GuestGuardProps) {
   }
 
   if (authStore.user) {
-    return null;
+    return <LoadingSpinner />;
   }
 
   return children;

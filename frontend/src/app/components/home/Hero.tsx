@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { observer } from "mobx-react-lite";
 
+import Button from "@/components/Button";
 import authStore from "@/stores/authStore";
 
 function Hero() {
@@ -43,27 +43,14 @@ function Hero() {
 
         <div className="mt-10 flex flex-col gap-3 sm:flex-row">
           {isAuthenticated ? (
-            <Link
-              href="/dashboard"
-              className="rounded-lg bg-white px-7 py-3.5 text-sm font-semibold text-gray-950 transition hover:bg-gray-200"
-            >
-              Go to Dashboard
-            </Link>
+            <Button href="/dashboard">Go to Dashboard</Button>
           ) : (
             <>
-              <Link
-                href="/accounts/register"
-                className="rounded-lg bg-white px-7 py-3.5 text-sm font-semibold text-gray-950 transition hover:bg-gray-200"
-              >
-                Get Started
-              </Link>
+              <Button href="/accounts/register">Get Started</Button>
 
-              <Link
-                href="/accounts/login"
-                className="rounded-lg border border-gray-700 px-7 py-3.5 text-sm font-semibold text-white transition hover:border-gray-600 hover:bg-gray-900"
-              >
+              <Button href="/accounts/login" variant="secondary">
                 Log In
-              </Link>
+              </Button>
             </>
           )}
         </div>

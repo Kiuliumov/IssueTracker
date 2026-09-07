@@ -38,7 +38,7 @@ export default function RegisterPage() {
         password_confirm: passwordConfirm,
       });
 
-      router.push("/dashboard");
+      router.refresh();
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 400) {
         const data = error.response.data;
