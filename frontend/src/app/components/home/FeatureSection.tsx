@@ -32,8 +32,8 @@ export default function FeatureSection() {
           </h2>
 
           <p className="mt-4 text-gray-400">
-            A focused workspace for managing issues and keeping projects
-            moving forward.
+            A focused workspace for managing issues and keeping projects moving
+            forward.
           </p>
         </div>
 
