@@ -3,7 +3,6 @@ from model_bakery import baker
 from rest_framework.test import APIClient
 
 from issues.models import Issue
-from projects.tests.conftest import project
 
 
 @pytest.fixture
