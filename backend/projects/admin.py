@@ -26,6 +26,4 @@ class ProjectAdmin(admin.ModelAdmin):
         "updated_at",
     )
 
-    autocomplete_fields = (
-        "owner",
-    )
+    autocomplete_fields = ("owner",)

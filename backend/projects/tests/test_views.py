@@ -4,14 +4,13 @@ from model_bakery import baker
 from projects.models import Project
 
 
+@pytest.mark.django_db
 class TestProjectViewSet:
-    @pytest.mark.django_db
     def test_anonymous_user_cannot_list_projects(self, api_client):
         response = api_client.get("/api/projects/")
 
         assert response.status_code == 403
 
-    @pytest.mark.django_db
     def test_authenticated_user_can_list_projects(
         self,
         authenticated_client,
@@ -29,7 +28,6 @@ class TestProjectViewSet:
         assert response.data["count"] == 2
         assert len(response.data["results"]) == 2
 
-    @pytest.mark.django_db
     def test_authenticated_user_can_create_project(
         self,
         authenticated_client,
@@ -52,7 +50,6 @@ class TestProjectViewSet:
         assert project.description == "Project management application."
         assert project.owner == user
 
-    @pytest.mark.django_db
     def test_create_project_rejects_blank_name(
         self,
         authenticated_client,
@@ -68,21 +65,17 @@ class TestProjectViewSet:
         assert response.status_code == 400
         assert "name" in response.data
 
-    @pytest.mark.django_db
     def test_authenticated_user_can_retrieve_project(
         self,
         authenticated_client,
         project,
     ):
-        response = authenticated_client.get(
-            f"/api/projects/{project.id}/"
-        )
+        response = authenticated_client.get(f"/api/projects/{project.id}/")
 
         assert response.status_code == 200
         assert response.data["id"] == project.id
         assert response.data["name"] == project.name
 
-    @pytest.mark.django_db
     def test_authenticated_user_can_update_project(
         self,
         authenticated_client,
@@ -102,20 +95,16 @@ class TestProjectViewSet:
 
         assert project.name == "Updated project"
 
-    @pytest.mark.django_db
     def test_authenticated_user_can_delete_project(
         self,
         authenticated_client,
         project,
     ):
-        response = authenticated_client.delete(
-            f"/api/projects/{project.id}/"
-        )
+        response = authenticated_client.delete(f"/api/projects/{project.id}/")
 
         assert response.status_code == 204
         assert not Project.objects.filter(pk=project.id).exists()
 
-    @pytest.mark.django_db
     def test_retrieve_nonexistent_project_returns_404(
         self,
         authenticated_client,
