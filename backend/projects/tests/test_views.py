@@ -161,7 +161,7 @@ class TestProjectViewSet:
             format="json",
         )
 
-    assert response.status_code == 404
+        assert response.status_code == 404
 
     def test_user_cannot_delete_another_users_project(
         self,
