@@ -133,9 +133,7 @@ class TestIssueViewSet:
         authenticated_client,
         issue,
     ):
-        response = authenticated_client.get(
-            f"/api/issues/{issue.id}/"
-        )
+        response = authenticated_client.get(f"/api/issues/{issue.id}/")
 
         assert response.status_code == 200
         assert response.data["id"] == issue.id
@@ -170,9 +168,7 @@ class TestIssueViewSet:
         authenticated_client,
         issue,
     ):
-        response = authenticated_client.delete(
-            f"/api/issues/{issue.id}/"
-        )
+        response = authenticated_client.delete(f"/api/issues/{issue.id}/")
 
         assert response.status_code == 204
         assert not Issue.objects.filter(pk=issue.id).exists()
@@ -181,8 +177,6 @@ class TestIssueViewSet:
         self,
         authenticated_client,
     ):
-        response = authenticated_client.get(
-            "/api/issues/999999/"
-        )
+        response = authenticated_client.get("/api/issues/999999/")
 
         assert response.status_code == 404
