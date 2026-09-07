@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import AuthCard from "../components/AuthCard";
 import Button from "../components/Button";
 import FormField from "../components/FormField";
-import GuestRoute from "../../../components/GuestRoute";
+import GuestRoute from "../../../components/route-guards/GuestRoute";
 import api from "@/lib/api";
 
 export default function LoginPage() {
