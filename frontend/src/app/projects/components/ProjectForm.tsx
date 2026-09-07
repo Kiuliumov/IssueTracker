@@ -23,17 +23,13 @@ export default function ProjectForm({
   onCancel,
 }: ProjectFormProps) {
   const [name, setName] = useState(project?.name ?? "");
-  const [description, setDescription] = useState(
-    project?.description ?? "",
-  );
+  const [description, setDescription] = useState(project?.description ?? "");
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
   const isEditing = Boolean(project);
 
-  const handleSubmit = async (
-    event: React.FormEvent<HTMLFormElement>,
-  ) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     setError(null);
@@ -60,9 +56,7 @@ export default function ProjectForm({
       onSuccess?.();
     } catch {
       setError(
-        isEditing
-          ? "Failed to update project."
-          : "Failed to create project.",
+        isEditing ? "Failed to update project." : "Failed to create project.",
       );
     } finally {
       setSaving(false);
@@ -118,9 +112,7 @@ export default function ProjectForm({
           <Textarea
             id="project-description"
             value={description}
-            onChange={(event) =>
-              setDescription(event.target.value)
-            }
+            onChange={(event) => setDescription(event.target.value)}
             placeholder="Describe what this project is about..."
             rows={5}
             disabled={saving}

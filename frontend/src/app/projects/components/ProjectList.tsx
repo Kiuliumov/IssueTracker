@@ -16,10 +16,7 @@ type ProjectListProps = {
   onCreate: () => void;
 };
 
-function ProjectList({
-  onEdit,
-  onCreate,
-}: ProjectListProps) {
+function ProjectList({ onEdit, onCreate }: ProjectListProps) {
   if (projectStore.loading) {
     return (
       <div className="flex justify-center py-16">
@@ -53,11 +50,7 @@ function ProjectList({
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {projectStore.projects.map((project) => (
-        <ProjectCard
-          key={project.id}
-          project={project}
-          onEdit={onEdit}
-        />
+        <ProjectCard key={project.id} project={project} onEdit={onEdit} />
       ))}
     </div>
   );

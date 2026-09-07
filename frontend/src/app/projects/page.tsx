@@ -16,8 +16,7 @@ import type { Project } from "@/lib/projects";
 
 function ProjectsPage() {
   const [showForm, setShowForm] = useState(false);
-  const [editingProject, setEditingProject] =
-    useState<Project | undefined>();
+  const [editingProject, setEditingProject] = useState<Project | undefined>();
 
   useEffect(() => {
     projectStore.fetchProjects();
@@ -72,10 +71,7 @@ function ProjectsPage() {
               />
             </div>
           ) : (
-            <ProjectList
-              onCreate={handleCreate}
-              onEdit={handleEdit}
-            />
+            <ProjectList onCreate={handleCreate} onEdit={handleEdit} />
           )}
         </Container>
       </main>

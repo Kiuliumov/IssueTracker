@@ -12,10 +12,7 @@ type ProjectCardProps = {
   onEdit: (project: Project) => void;
 };
 
-export default function ProjectCard({
-  project,
-  onEdit,
-}: ProjectCardProps) {
+export default function ProjectCard({ project, onEdit }: ProjectCardProps) {
   const handleDelete = async () => {
     const confirmed = window.confirm(
       `Delete "${project.name}"? This cannot be undone.`,
@@ -46,10 +43,7 @@ export default function ProjectCard({
       </div>
 
       <div className="mt-6 flex items-center gap-3 border-t border-gray-800 pt-4">
-        <Button
-          href={`/projects/${project.id}`}
-          variant="primary"
-        >
+        <Button href={`/projects/${project.id}`} variant="primary">
           View
         </Button>
 
