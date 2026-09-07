@@ -1,3 +1,25 @@
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+import authStore from "@/stores/authStore";
+
 export default function Home() {
-  return <h1 className="text-3xl font-bold">Home</h1>;
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!authStore.initialized) {
+      authStore.fetchUser();
+      return;
+    }
+
+    if (authStore.user) {
+      router.replace("/dashboard");
+    } else {
+      router.replace("/accounts/login");
+    }
+  }, [router]);
+
+  return null;
 }
