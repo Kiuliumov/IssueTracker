@@ -2,6 +2,9 @@
 
 A full-stack issue and project management application.
 
+Current release: <PUT_CURRENT_RELEASE_HERE>
+Live demo: <PUT_LIVE_DEMO_HERE>
+
 ## Tech Stack
 
 * **Frontend:** Next.js, TypeScript, Tailwind CSS, Axios, MobX
