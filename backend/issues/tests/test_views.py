@@ -4,22 +4,23 @@ from model_bakery import baker
 from issues.models import Issue
 
 
+@pytest.mark.django_db
 class TestIssueViewSet:
-    @pytest.mark.django_db
     def test_anonymous_user_cannot_list_issues(self, api_client):
         response = api_client.get("/api/issues/")
 
         assert response.status_code == 403
 
-    @pytest.mark.django_db
     def test_authenticated_user_can_list_issues(
         self,
         authenticated_client,
         user,
+        project,
     ):
         baker.make(
             Issue,
             reporter=user,
+            project=project,
             _quantity=2,
         )
 
@@ -29,15 +30,16 @@ class TestIssueViewSet:
         assert response.data["count"] == 2
         assert len(response.data["results"]) == 2
 
-    @pytest.mark.django_db
     def test_authenticated_user_can_create_issue(
         self,
         authenticated_client,
         user,
+        project,
     ):
         response = authenticated_client.post(
             "/api/issues/",
             {
+                "project": project.id,
                 "title": "New issue",
                 "description": "Something is broken.",
                 "status": "open",
@@ -50,17 +52,22 @@ class TestIssueViewSet:
 
         issue = Issue.objects.get(pk=response.data["id"])
 
+        assert issue.project == project
         assert issue.title == "New issue"
         assert issue.description == "Something is broken."
         assert issue.status == "open"
         assert issue.priority == "high"
         assert issue.reporter == user
 
-    @pytest.mark.django_db
-    def test_anonymous_user_cannot_create_issue(self, api_client):
+    def test_anonymous_user_cannot_create_issue(
+        self,
+        api_client,
+        project,
+    ):
         response = api_client.post(
             "/api/issues/",
             {
+                "project": project.id,
                 "title": "New issue",
             },
             format="json",
@@ -68,14 +75,15 @@ class TestIssueViewSet:
 
         assert response.status_code == 403
 
-    @pytest.mark.django_db
     def test_create_issue_rejects_blank_title(
         self,
         authenticated_client,
+        project,
     ):
         response = authenticated_client.post(
             "/api/issues/",
             {
+                "project": project.id,
                 "title": "   ",
             },
             format="json",
@@ -84,14 +92,15 @@ class TestIssueViewSet:
         assert response.status_code == 400
         assert "title" in response.data
 
-    @pytest.mark.django_db
     def test_create_issue_rejects_invalid_status(
         self,
         authenticated_client,
+        project,
     ):
         response = authenticated_client.post(
             "/api/issues/",
             {
+                "project": project.id,
                 "title": "Test issue",
                 "status": "invalid",
             },
@@ -101,14 +110,15 @@ class TestIssueViewSet:
         assert response.status_code == 400
         assert "status" in response.data
 
-    @pytest.mark.django_db
     def test_create_issue_rejects_invalid_priority(
         self,
         authenticated_client,
+        project,
     ):
         response = authenticated_client.post(
             "/api/issues/",
             {
+                "project": project.id,
                 "title": "Test issue",
                 "priority": "invalid",
             },
@@ -118,7 +128,6 @@ class TestIssueViewSet:
         assert response.status_code == 400
         assert "priority" in response.data
 
-    @pytest.mark.django_db
     def test_authenticated_user_can_retrieve_issue(
         self,
         authenticated_client,
@@ -129,8 +138,8 @@ class TestIssueViewSet:
         assert response.status_code == 200
         assert response.data["id"] == issue.id
         assert response.data["title"] == issue.title
+        assert response.data["project"] == issue.project.id
 
-    @pytest.mark.django_db
     def test_authenticated_user_can_update_issue(
         self,
         authenticated_client,
@@ -154,7 +163,6 @@ class TestIssueViewSet:
         assert issue.status == "in_progress"
         assert issue.priority == "high"
 
-    @pytest.mark.django_db
     def test_authenticated_user_can_delete_issue(
         self,
         authenticated_client,
@@ -165,7 +173,6 @@ class TestIssueViewSet:
         assert response.status_code == 204
         assert not Issue.objects.filter(pk=issue.id).exists()
 
-    @pytest.mark.django_db
     def test_retrieve_nonexistent_issue_returns_404(
         self,
         authenticated_client,

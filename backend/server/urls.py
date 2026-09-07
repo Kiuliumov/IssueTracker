@@ -37,5 +37,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/accounts/", include("accounts.urls")),
     path("api/issues/", include("issues.urls")),
+    path("api/projects/", include("projects.urls")),
     *spectacular_urlpatterns,
 ]

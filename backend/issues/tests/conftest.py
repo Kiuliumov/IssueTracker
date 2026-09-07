@@ -3,6 +3,7 @@ from model_bakery import baker
 from rest_framework.test import APIClient
 
 from issues.models import Issue
+from projects.tests.conftest import project  # noqa F401
 
 
 @pytest.fixture
@@ -36,8 +37,9 @@ def authenticated_client(user):
 
 
 @pytest.fixture
-def issue(user):
+def issue(user, project):  # noqa F811
     return baker.make(
         Issue,
         reporter=user,
+        project=project,
     )

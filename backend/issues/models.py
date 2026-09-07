@@ -49,5 +49,11 @@ class Issue(models.Model):
 
     updated_at = models.DateTimeField(auto_now=True)
 
+    project = models.ForeignKey(
+        "projects.Project",
+        on_delete=models.CASCADE,
+        related_name="issues",
+    )
+
     def __str__(self):
         return self.title
