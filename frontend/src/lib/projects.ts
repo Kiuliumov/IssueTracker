@@ -14,9 +14,19 @@ export type ProjectInput = {
   description: string;
 };
 
-export async function getProjects() {
-  const response = await api.get("/projects/");
-  return response.data;
+export type ProjectListResponse = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Project[];
+};
+
+export async function getProjects(page = 1) {
+  const response = await api.get("/projects/", {
+    params: { page },
+  });
+
+  return response.data as ProjectListResponse;
 }
 
 export async function getProject(id: number) {

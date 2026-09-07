@@ -1,5 +1,4 @@
 import { makeAutoObservable, runInAction } from "mobx";
-
 import {
   createProject,
   deleteProject,
@@ -14,19 +13,47 @@ class ProjectStore {
   loading = false;
   error: string | null = null;
 
+  currentPage = 1;
+  totalProjects = 0;
+  hasNextPage = false;
+  hasPreviousPage = false;
+  searchQuery = "";
+
   constructor() {
     makeAutoObservable(this);
   }
 
-  async fetchProjects() {
+  get filteredProjects() {
+    const query = this.searchQuery.trim().toLowerCase();
+
+    if (!query) {
+      return this.projects;
+    }
+
+    return this.projects.filter(
+      (project) =>
+        project.name.toLowerCase().includes(query) ||
+        project.description.toLowerCase().includes(query),
+    );
+  }
+
+  setSearchQuery(query: string) {
+    this.searchQuery = query;
+  }
+
+  async fetchProjects(page = 1) {
     this.loading = true;
     this.error = null;
 
     try {
-      const data = await getProjects();
+      const data = await getProjects(page);
 
       runInAction(() => {
         this.projects = data.results;
+        this.totalProjects = data.count;
+        this.currentPage = page;
+        this.hasNextPage = Boolean(data.next);
+        this.hasPreviousPage = Boolean(data.previous);
         this.loading = false;
       });
     } catch {
@@ -45,6 +72,7 @@ class ProjectStore {
 
       runInAction(() => {
         this.projects.unshift(project);
+        this.totalProjects += 1;
       });
 
       return project;
@@ -86,7 +114,10 @@ class ProjectStore {
       await deleteProject(id);
 
       runInAction(() => {
-        this.projects = this.projects.filter((project) => project.id !== id);
+        this.projects = this.projects.filter(
+          (project) => project.id !== id,
+        );
+        this.totalProjects -= 1;
       });
     } catch {
       runInAction(() => {

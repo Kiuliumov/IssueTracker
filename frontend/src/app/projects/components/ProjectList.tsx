@@ -5,9 +5,9 @@ import { observer } from "mobx-react-lite";
 import EmptyState from "@/components/ui/EmptyState";
 import ErrorMessage from "@/components/ui/ErrorMessage";
 import LoadingSpinner from "@/components/LoadingSpinner";
-
 import ProjectCard from "./ProjectCard";
-
+import ProjectFilters from "./ProjectFilters";
+import ProjectPagination from "./ProjectPagination";
 import projectStore from "@/stores/projectStore";
 import type { Project } from "@/lib/projects";
 
@@ -29,30 +29,50 @@ function ProjectList({ onEdit, onCreate }: ProjectListProps) {
     return <ErrorMessage message={projectStore.error} />;
   }
 
-  if (projectStore.projects.length === 0) {
-    return (
-      <EmptyState
-        title="No projects yet"
-        description="Create your first project to start organizing your development work."
-        action={
-          <button
-            type="button"
-            onClick={onCreate}
-            className="rounded-lg bg-indigo-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-400"
-          >
-            Create project
-          </button>
-        }
-      />
-    );
-  }
-
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {projectStore.projects.map((project) => (
-        <ProjectCard key={project.id} project={project} onEdit={onEdit} />
-      ))}
-    </div>
+    <>
+      <ProjectFilters />
+
+      {projectStore.filteredProjects.length === 0 ? (
+        <EmptyState
+          title={
+            projectStore.searchQuery
+              ? "No matching projects"
+              : "No projects yet"
+          }
+          description={
+            projectStore.searchQuery
+              ? "Try a different search term."
+              : "Create your first project to start organizing your development work."
+          }
+          action={
+            !projectStore.searchQuery ? (
+              <button
+                type="button"
+                onClick={onCreate}
+                className="rounded-lg bg-indigo-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-400"
+              >
+                Create project
+              </button>
+            ) : undefined
+          }
+        />
+      ) : (
+        <>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {projectStore.filteredProjects.map((project) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                onEdit={onEdit}
+              />
+            ))}
+          </div>
+
+          <ProjectPagination />
+        </>
+      )}
+    </>
   );
 }
 
