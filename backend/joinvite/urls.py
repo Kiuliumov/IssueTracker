@@ -9,12 +9,12 @@ urlpatterns = [
         name="create-joinvite",
     ),
     path(
-        "<uuid:token>/accept/",
+        "joinvite/<uuid:token>/accept/",
         AcceptJoinviteView.as_view(),
         name="accept-joinvite",
     ),
     path(
-        "<int:joinvite_id>/",
+        "joinvite/<int:joinvite_id>/",
         RevokeJoinviteView.as_view(),
         name="revoke-joinvite",
     ),
