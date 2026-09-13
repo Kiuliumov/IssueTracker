@@ -1,8 +1,10 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import {
+  addProjectMember,
   createProject,
   deleteProject,
   getProjects,
+  removeProjectMember,
   updateProject,
   type Project,
   type ProjectInput,
@@ -123,6 +125,60 @@ class ProjectStore {
       });
 
       throw new Error("Failed to delete project.");
+    }
+  }
+
+  async addMember(projectId: number, userId: number) {
+    this.error = null;
+
+    try {
+      const member = await addProjectMember(projectId, userId);
+
+      runInAction(() => {
+        this.projects = this.projects.map((project) =>
+          project.id === projectId
+            ? {
+                ...project,
+                members: [...project.members, member],
+              }
+            : project,
+        );
+      });
+
+      return member;
+    } catch {
+      runInAction(() => {
+        this.error = "Failed to add project member.";
+      });
+
+      throw new Error("Failed to add project member.");
+    }
+  }
+
+  async removeMember(projectId: number, userId: number) {
+    this.error = null;
+
+    try {
+      await removeProjectMember(projectId, userId);
+
+      runInAction(() => {
+        this.projects = this.projects.map((project) =>
+          project.id === projectId
+            ? {
+                ...project,
+                members: project.members.filter(
+                  (member) => member.id !== userId,
+                ),
+              }
+            : project,
+        );
+      });
+    } catch {
+      runInAction(() => {
+        this.error = "Failed to remove project member.";
+      });
+
+      throw new Error("Failed to remove project member.");
     }
   }
 }

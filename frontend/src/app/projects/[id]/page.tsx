@@ -4,14 +4,17 @@ import Link from "next/link";
 import { observer } from "mobx-react-lite";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 import Container from "@/components/layout/Container";
 import ErrorMessage from "@/components/ui/ErrorMessage";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Card from "@/components/ui/Card";
+import Input from "@/components/ui/Input";
 import ProtectedRoute from "@/components/route-guards/ProtectedRoute";
 import IssueList from "../components/issues/IssueList";
 import IssueForm from "../components/issues/IssueForm";
+import { createJoinvite } from "@/lib/joinvite";
 import { getProject, type Project } from "@/lib/projects";
 import issueStore from "@/stores/issueStore";
 import projectStore from "@/stores/projectStore";
@@ -24,6 +27,11 @@ function ProjectDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showIssueForm, setShowIssueForm] = useState(false);
+
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviteLoading, setInviteLoading] = useState(false);
+  const [inviteError, setInviteError] = useState<string | null>(null);
+  const [inviteSuccess, setInviteSuccess] = useState(false);
 
   const projectId = Number(params.id);
 
@@ -63,6 +71,43 @@ function ProjectDetailPage() {
       router.push("/projects");
     } catch {
       setError("Failed to delete project.");
+    }
+  };
+
+  const handleInvite = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const email = inviteEmail.trim();
+
+    if (!email) {
+      setInviteError("Email is required.");
+      return;
+    }
+
+    setInviteLoading(true);
+    setInviteError(null);
+    setInviteSuccess(false);
+
+    try {
+      await createJoinvite(projectId, email);
+
+      setInviteEmail("");
+      setInviteSuccess(true);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        const responseData = error.response?.data;
+
+        const message =
+          responseData?.email?.[0] ||
+          responseData?.detail ||
+          "Failed to send invitation.";
+
+        setInviteError(message);
+      } else {
+        setInviteError("Failed to send invitation.");
+      }
+    } finally {
+      setInviteLoading(false);
     }
   };
 
@@ -197,12 +242,45 @@ function ProjectDetailPage() {
                       ))}
                     </div>
 
-                    <button
-                      type="button"
-                      className="mt-5 w-full rounded-lg bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-400"
-                    >
-                      Add member
-                    </button>
+                    <div className="mt-6 border-t border-gray-800 pt-6">
+                      <h3 className="text-sm font-semibold text-white">
+                        Invite a member
+                      </h3>
+
+                      <p className="mt-1 text-xs text-gray-500">
+                        Send an invitation to their email address.
+                      </p>
+
+                      <form onSubmit={handleInvite} className="mt-4 space-y-3">
+                        <Input
+                          type="email"
+                          value={inviteEmail}
+                          onChange={(event) =>
+                            setInviteEmail(event.target.value)
+                          }
+                          placeholder="user@example.com"
+                          disabled={inviteLoading}
+                        />
+
+                        {inviteError && (
+                          <p className="text-sm text-red-400">{inviteError}</p>
+                        )}
+
+                        {inviteSuccess && (
+                          <p className="text-sm text-green-400">
+                            Invitation sent successfully.
+                          </p>
+                        )}
+
+                        <button
+                          type="submit"
+                          disabled={inviteLoading}
+                          className="w-full rounded-lg bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-400 disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          {inviteLoading ? "Sending..." : "Send invitation"}
+                        </button>
+                      </form>
+                    </div>
                   </Card>
                 </div>
               </div>

@@ -29,7 +29,11 @@ function ProtectedRoute({ children }: ProtectedRouteProps) {
       }),
       ({ initialized, user }) => {
         if (initialized && !user) {
-          router.replace("/accounts/login");
+          router.replace(
+            `/accounts/login?next=${encodeURIComponent(
+              window.location.pathname,
+            )}`,
+          );
         }
       },
     );

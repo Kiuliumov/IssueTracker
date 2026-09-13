@@ -38,5 +38,6 @@ urlpatterns = [
     path("api/accounts/", include("accounts.urls")),
     path("api/issues/", include("issues.urls")),
     path("api/projects/", include("projects.urls")),
+    path("api/joinvite/", include("joinvite.urls")),
     *spectacular_urlpatterns,
 ]
