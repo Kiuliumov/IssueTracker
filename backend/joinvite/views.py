@@ -2,14 +2,13 @@
 from datetime import timedelta
 
 from django.contrib.auth import get_user_model
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import permissions, status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from accounts.serializers import UserSerializer
 from projects.models import Project
 
 from .models import Joinvite
